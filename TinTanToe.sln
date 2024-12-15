@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinTanToe", "TinTanToe\TinTanToe.csproj", "{CFA08294-5556-4991-903E-FD1C6C6B9315}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CFA08294-5556-4991-903E-FD1C6C6B9315}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFA08294-5556-4991-903E-FD1C6C6B9315}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFA08294-5556-4991-903E-FD1C6C6B9315}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFA08294-5556-4991-903E-FD1C6C6B9315}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
