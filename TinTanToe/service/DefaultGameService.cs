@@ -19,8 +19,8 @@ public class DefaultGameService : GameService
         
     public int startGame(int playerId1, int playerId2)
     {
-        Player? player1 = GetAndValidatePlayer(playerId1);
-        Player? player2 = GetAndValidatePlayer(playerId2);
+        GetAndValidatePlayer(playerId1);
+        GetAndValidatePlayer(playerId2);
 
         Game g = new Game(playerId1, playerId2);
         return _gameRepository.createGame(g);
@@ -29,7 +29,14 @@ public class DefaultGameService : GameService
     
     public void endGame(int gameId, PlayerResult playerResult1, PlayerResult playerResult2)
     {
-        
+        Game? game =_gameRepository.getGameById(gameId);
+        if (game == null)
+        {
+            throw new Exception("Гра не знайдена:(");
+        }
+
+        GameResult gr = new GameResult(gameId, playerResult1, playerResult2);
+        _gameResultRepository.CreateGameResult(gameId, gr);
     }
     
     private Player? GetAndValidatePlayer(int playerId1)
