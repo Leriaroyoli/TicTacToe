@@ -12,4 +12,6 @@ public interface GameService
     
     public List<GameResult> GetAllResults();
 
+    public void playGame(int gameId, int playerId1, int playerId2);
+
 }

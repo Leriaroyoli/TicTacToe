@@ -31,7 +31,7 @@ switch (r)
         int playerId1 = login();
         int playerId2 = login();
         int gameId = gameService.startGame(playerId1, playerId2);
-        // todo: play game (логіка) 
+        gameService.playGame(gameId, playerId1, playerId2);
         break;
     case 3 :
         printHistory();
