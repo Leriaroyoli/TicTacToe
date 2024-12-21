@@ -12,4 +12,14 @@ public class GameResult
         this.playerResult1 = playerResult1;
         this.playerResult2 = playerResult2;
     }
+
+    // public override string ToString()
+    // {
+    //     return 
+    // } 
+    public override string ToString()
+    {
+        return $"{nameof(gameId)}: {gameId},\n{nameof(playerResult1)}: {playerResult1}," +
+               $"\n{nameof(playerResult2)}: {playerResult2}";
+    }
 }

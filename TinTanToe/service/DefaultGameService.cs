@@ -25,7 +25,6 @@ public class DefaultGameService : GameService
         Game g = new Game(playerId1, playerId2);
         return _gameRepository.createGame(g);
     }
-
     
     public void endGame(int gameId, PlayerResult playerResult1, PlayerResult playerResult2)
     {
@@ -37,6 +36,17 @@ public class DefaultGameService : GameService
 
         GameResult gr = new GameResult(gameId, playerResult1, playerResult2);
         _gameResultRepository.CreateGameResult(gameId, gr);
+    }
+
+    public List<GameResult> getGameResultByPlayerId(int playerId)
+    {
+       return _gameResultRepository.GetGameResultByPlayerId(playerId);
+    }
+    
+    public List<GameResult> GetAllResults()
+    {
+        List<GameResult> allResults = _gameResultRepository.GetAllResults();
+        return allResults;
     }
     
     private Player? GetAndValidatePlayer(int playerId1)

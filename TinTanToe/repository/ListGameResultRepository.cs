@@ -5,7 +5,11 @@ namespace TinTanToe.repository;
 public class ListGameResultRepository: GameResultRepository
 {
     private List<GameResult> _gameResults = new List<GameResult>();
-    
+
+    public List<GameResult> GetAllResults()
+    {
+        return _gameResults;
+    }
     public void CreateGameResult(int gameId, GameResult g)
     {
         g.gameId = gameId ;
@@ -25,17 +29,18 @@ public class ListGameResultRepository: GameResultRepository
         return null;
     }
 
-    public GameResult? GetGameResultByPlayerId(int playerId)
+    public List<GameResult> GetGameResultByPlayerId(int playerId)
     {
+        List<GameResult> r = new List<GameResult>();
         foreach (var game in _gameResults)
         {
             if ( game.playerResult1 != null && playerId == game.playerResult1.playerId ||
                  game.playerResult2 != null && playerId == game.playerResult2.playerId)
             {
-                return game;
+                r.Add(game);
             }
         }
 
-        return null; 
+        return r; 
     }
 }

@@ -12,18 +12,17 @@ public class DefaultPlayerService : PlayerService
         _playerRepository = playerRepository; 
     }
     
-    public void registerPlayer(string name, string password)
+    public void registerPlayer(string? name, string? password)
     {//todo 1. перевірити чи не існує гравця з таким ім'ям 
         // 2. якщо існує, помилка. 3.створити об'єкт player 4. зберегти в _playerRepository 
+        validateNameAndPassword(name, password);
         var existingPlayer = GetPlayerByNameAndThrowIfNull(name, "Гравець з таким їм'ям вже існує");
 
         Player player = new Player(name, password, 1000);
         
         _playerRepository.addPlayer(player);
     }
-
-   
-
+    
     public void donate500(int id)
     {
         Player? p = getPlayerById(id);
@@ -34,9 +33,10 @@ public class DefaultPlayerService : PlayerService
         p.addToRating(500);
     }
 
-    public int? loginPlayer(string name, string password)
+    public int loginPlayer(string? name, string? password)
     {
-        Player? existingPlayer = GetPlayerByNameAndThrowIfNull(name, "Гравця не існує");
+        validateNameAndPassword(name, password);
+        Player existingPlayer = GetPlayerByNameAndThrowIfNull(name, "Гравця не існує");
 
         if (existingPlayer.Password == password)
         {
@@ -45,14 +45,7 @@ public class DefaultPlayerService : PlayerService
 
         throw new Exception("Пароль не вірний");
     }
-
-    public double getRating(string name)
-    {
-        Player? player = GetPlayerByNameAndThrowIfNull(name, "Гравця не знайдено");
-
-        return player.Rating; 
-    }
-
+    
     public Player? getPlayerById(int id)
     {
         return _playerRepository.getPlayerById(id);
@@ -62,8 +55,15 @@ public class DefaultPlayerService : PlayerService
     {
         return _playerRepository.getPlayerByName(name);
     }
+
+    public List<Player> getAllPlayers()
+    {
+        return _playerRepository.getAllPlayers()
+            .OrderByDescending(item => item.Rating)
+            .ToList();
+    }
     
-    private Player? GetPlayerByNameAndThrowIfNull(string name, string exceptionMessage)
+    private Player GetPlayerByNameAndThrowIfNull(string name, string exceptionMessage)
     {
         Player? existingPlayer = getPlayerByName(name);
         if (existingPlayer == null)
@@ -72,5 +72,14 @@ public class DefaultPlayerService : PlayerService
         }
 
         return existingPlayer;
+        
+    } 
+    
+    private void validateNameAndPassword(string? name, string? password)
+    {
+        if (name== null || password== null)
+        {
+            throw new Exception("Ім'я або пароль не вказано!");
+        }
     }
 }
