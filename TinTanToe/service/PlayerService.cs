@@ -15,4 +15,6 @@ public interface PlayerService
     public Player? getPlayerByName(string name);
 
     public List<Player> getAllPlayers();
+
+    public void addOrWithdraw(int playerId,double sum, ManipulationType type);
 }

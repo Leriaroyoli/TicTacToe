@@ -8,9 +8,9 @@ public interface GameService
 
     public void endGame(int gameId, PlayerResult playerResult1, PlayerResult playerResult2);
 
-    public List<GameResult> getGameResultByPlayerId(int playerId);
+    public List<GameResultInfo> getGameResultByPlayerId(int playerId);
     
-    public List<GameResult> GetAllResults();
+    public List<GameResultInfo> GetAllResults();
 
     public void playGame(int gameId, int playerId1, int playerId2);
 

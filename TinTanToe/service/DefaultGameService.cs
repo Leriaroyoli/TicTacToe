@@ -34,19 +34,25 @@ public class DefaultGameService : GameService
             throw new Exception("Гра не знайдена:(");
         }
 
+        toScorePoints(playerResult1);
+        toScorePoints(playerResult2);
+
         GameResult gr = new GameResult(gameId, playerResult1, playerResult2);
         _gameResultRepository.CreateGameResult(gameId, gr);
     }
 
-    public List<GameResult> getGameResultByPlayerId(int playerId)
+    public List<GameResultInfo> getGameResultByPlayerId(int playerId)
     {
-       return _gameResultRepository.GetGameResultByPlayerId(playerId);
+        List<GameResult> gameResults = _gameResultRepository.GetGameResultByPlayerId(playerId);
+        var gameResultsInfo = getGameResultsInfo(gameResults);
+
+        return gameResultsInfo;
     }
     
-    public List<GameResult> GetAllResults()
+    public List<GameResultInfo> GetAllResults()
     {
         List<GameResult> allResults = _gameResultRepository.GetAllResults();
-        return allResults;
+        return getGameResultsInfo(allResults);
     }
     
     public void playGame(int gameId, int playerId1, int playerId2)
@@ -72,16 +78,16 @@ public class DefaultGameService : GameService
                 {
                     Console.WriteLine($"Player {currentPlayer} wins!");
                     endGame(gameId, 
-                        new PlayerResult { playerId = playerId1, status = currentPlayer == playerId1 ? "WIN" : "LOSE" },
-                        new PlayerResult { playerId = playerId2, status = currentPlayer == playerId2 ? "WIN" : "LOSE" });
+                        new PlayerResult(playerId1, currentPlayer == playerId1 ? PlayerGameStatus.WIN: PlayerGameStatus.LOSE),
+                        new PlayerResult(playerId2, currentPlayer == playerId2 ? PlayerGameStatus.WIN: PlayerGameStatus.LOSE));
                     gameEnded = true;
                 }
                 else if (IsBoardFull(board))
                 {
                     Console.WriteLine("The game is a draw!");
                     endGame(gameId, 
-                        new PlayerResult { playerId = playerId1, status = "DRAW" },
-                        new PlayerResult { playerId = playerId2, status = "DRAW" });
+                        new PlayerResult(playerId1, PlayerGameStatus.DRAW),
+                        new PlayerResult(playerId2, PlayerGameStatus.DRAW));
                     gameEnded = true;
                 }
                 else
@@ -158,6 +164,43 @@ public class DefaultGameService : GameService
         if (player == null || player.Rating < 100)
         {
             throw new Exception("Гравець не може прийняти участь ");
+        }
+    }
+    
+    private List<GameResultInfo> getGameResultsInfo(List<GameResult> gameResults)
+    {
+        List<GameResultInfo> gameResultsInfo = new List<GameResultInfo>();
+        foreach (var g in gameResults)
+        {
+            PlayerResultInfo p1 = buildPlayerResultInfo(g.playerResult1);
+            PlayerResultInfo p2 = buildPlayerResultInfo(g.playerResult2);
+            GameResultInfo gri = new GameResultInfo(g.gameId, p1, p2);
+            gameResultsInfo.Add(gri);
+        }
+
+        return gameResultsInfo;
+    }
+
+    private PlayerResultInfo buildPlayerResultInfo(PlayerResult playerResult)
+    {
+        int playerId1 = playerResult.playerId;
+        Player? player1 =_playerService.getPlayerById(playerId1);
+        return new PlayerResultInfo(playerResult, player1.Name);
+    }
+    
+    private void toScorePoints(PlayerResult playerResult1)
+    {
+        switch (playerResult1.status)
+        {
+            case PlayerGameStatus.WIN:
+                _playerService.addOrWithdraw(playerResult1.playerId, 100, ManipulationType.ADD);
+                break;
+            case PlayerGameStatus.LOSE:
+                _playerService.addOrWithdraw(playerResult1.playerId, 100, ManipulationType.WITHDRAW);
+                break;
+            case PlayerGameStatus.DRAW:
+                _playerService.addOrWithdraw(playerResult1.playerId, 50, ManipulationType.ADD);
+                break;
         }
     }
 

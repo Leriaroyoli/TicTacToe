@@ -13,37 +13,57 @@ GameService gameService = new DefaultGameService(playerService, gameRepository, 
 
 Console.WriteLine("Це гра хрестики-нулики!");
 
-printInstructions();
-int r = int.Parse(Console.ReadLine());
-switch (r)
+while (true)
 {
-    case 1 :
-        var name = readName();
-        var password = readPassword();
-        try
+    try
+    {
+        printInstructions();
+        if (!int.TryParse(Console.ReadLine(), out int r))
         {
-            playerService.registerPlayer(name, password);
+            Console.WriteLine("Неправильний ввід. Будь ласка, введіть номер.");
+            continue;
         }
-        catch (Exception e)
+
+        switch (r)
         {
-            Console.WriteLine(e);
+            case 1:
+                var name = readName();
+                var password = readPassword();
+                try
+                {
+                    playerService.registerPlayer(name, password);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+                break;
+            case 2:
+                int playerId1 = login();
+                int playerId2 = login();
+                int gameId = gameService.startGame(playerId1, playerId2);
+                
+                // Play Tic-Tac-Toe game
+                gameService.playGame(gameId, playerId1, playerId2);
+                break;
+            case 3:
+                printHistory();
+                break;
+            case 4:
+                printRatings();
+                break;
+            case 0:
+                Console.WriteLine("Вихід з гри. До побачення!");
+                return;
+            default:
+                Console.WriteLine("Хибний номер!");
+                break;
         }
-        break;
-    case 2 :
-        int playerId1 = login();
-        int playerId2 = login();
-        int gameId = gameService.startGame(playerId1, playerId2);
-        gameService.playGame(gameId, playerId1, playerId2);
-        break;
-    case 3 :
-        printHistory();
-        break;
-    case 4 :
-        printRatings();
-        break;
-    default:
-        Console.WriteLine("Хибний номер!");
-        break;
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Сталася помилка: {ex.Message}");
+    }
 }
 
 string? readPassword()
@@ -122,12 +142,12 @@ void printHistory()
         case 1:
             var player = getPlayerFromConsoleByName();
 
-            List<GameResult> playerGameResults = gameService.getGameResultByPlayerId(player.Id);
+            List<GameResultInfo> playerGameResults = gameService.getGameResultByPlayerId(player.Id);
             printGameResults(playerGameResults);
             break;
 
         case 2:
-            List<GameResult> allResults = gameService.GetAllResults();
+            List<GameResultInfo> allResults = gameService.GetAllResults();
             printGameResults(allResults);
             break;
 
@@ -151,7 +171,7 @@ Player getPlayerFromConsoleByName()
     return player1;
 }
 
-void printGameResults(List<GameResult> playerGameResults)
+void printGameResults(List<GameResultInfo> playerGameResults)
 {
     foreach (var g in playerGameResults)
     {

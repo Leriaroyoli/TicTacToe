@@ -25,14 +25,10 @@ public class DefaultPlayerService : PlayerService
     
     public void donate500(int id)
     {
-        Player? p = getPlayerById(id);
-        if (p == null)
-        {
-            throw new Exception("Гравця з таким id не існує");
-        }
+        var p = getPlayerByIdOrThrowIfNull(id);
         p.addToRating(500);
     }
-
+    
     public int loginPlayer(string? name, string? password)
     {
         validateNameAndPassword(name, password);
@@ -62,6 +58,20 @@ public class DefaultPlayerService : PlayerService
             .OrderByDescending(item => item.Rating)
             .ToList();
     }
+
+    public void addOrWithdraw(int playerId, double sum, ManipulationType type)
+    {
+        Player player = getPlayerByIdOrThrowIfNull(playerId);
+        switch (type)
+        {
+            case ManipulationType.ADD:
+                player.addToRating(sum);
+                break;
+            case ManipulationType.WITHDRAW:
+                player.withdrawFromRating(sum);
+                break;
+        }
+    }
     
     private void validatePlayerNotFound(string name, string exceptionMessage)
     {
@@ -88,5 +98,16 @@ public class DefaultPlayerService : PlayerService
         {
             throw new Exception("Ім'я або пароль не вказано!");
         }
+    }
+    
+    private Player getPlayerByIdOrThrowIfNull(int id)
+    {
+        Player? p = getPlayerById(id);
+        if (p == null)
+        {
+            throw new Exception("Гравця з таким id не існує");
+        }
+
+        return p;
     }
 }
