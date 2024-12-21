@@ -3,6 +3,8 @@ using TinTanToe.data;
 using TinTanToe.repository;
 using TinTanToe.service;
 
+Console.OutputEncoding = System.Text.Encoding.UTF8;
+
 PlayerRepository playerRepository = new ListPlayerRepository();
 PlayerService playerService = new DefaultPlayerService(playerRepository);
 GameRepository gameRepository = new ListGameRepository();

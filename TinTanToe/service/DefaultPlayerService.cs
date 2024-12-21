@@ -16,7 +16,7 @@ public class DefaultPlayerService : PlayerService
     {//todo 1. перевірити чи не існує гравця з таким ім'ям 
         // 2. якщо існує, помилка. 3.створити об'єкт player 4. зберегти в _playerRepository 
         validateNameAndPassword(name, password);
-        var existingPlayer = GetPlayerByNameAndThrowIfNull(name, "Гравець з таким їм'ям вже існує");
+        validatePlayerNotFound(name, "Гравець з таким їм'ям вже існує");
 
         Player player = new Player(name, password, 1000);
         
@@ -63,6 +63,14 @@ public class DefaultPlayerService : PlayerService
             .ToList();
     }
     
+    private void validatePlayerNotFound(string name, string exceptionMessage)
+    {
+        Player? existingPlayer = getPlayerByName(name);
+        if (existingPlayer != null)
+        {
+            throw new Exception(exceptionMessage);
+        }
+    } 
     private Player GetPlayerByNameAndThrowIfNull(string name, string exceptionMessage)
     {
         Player? existingPlayer = getPlayerByName(name);
@@ -74,7 +82,6 @@ public class DefaultPlayerService : PlayerService
         return existingPlayer;
         
     } 
-    
     private void validateNameAndPassword(string? name, string? password)
     {
         if (name== null || password== null)
