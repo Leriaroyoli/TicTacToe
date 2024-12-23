@@ -14,12 +14,12 @@ public class Player
         Rating = rating;
     }
 
-    public void addToRating(double sum)
+    public void AddToRating(double sum)
     {
         Rating += sum;
     }
 
-    public void withdrawFromRating(double sum)
+    public void WithdrawFromRating(double sum)
     {
         Rating -= sum;
     }

@@ -4,8 +4,8 @@ namespace TinTanToe.repository;
 
 public interface GameRepository
 {
-    public int createGame(Game g);
-    public Game? getGameById(int id);
-    public Game? getGameByPlayerId(int id);
+    public int CreateGame(Game g);
+    public Game? GetGameById(int id);
+    public Game? GetGameByPlayerId(int id);
     
 }

@@ -6,19 +6,19 @@ public class ListGameRepository : GameRepository
 {
     private List<Game> _games = new List<Game>();
 
-    public int createGame(Game g)
+    public int CreateGame(Game g)
     {
         int nextId = _games.Count;
-        g.id = nextId;
+        g.Id = nextId;
         _games.Add(g);
         return nextId;
     } 
 
-    public Game? getGameById(int id)
+    public Game? GetGameById(int id)
     {
         foreach (var game in _games)
         {
-            if (game.id != null && game.id == id)
+            if (game.Id != null && game.Id == id)
             {
                 return game;
             }
@@ -27,11 +27,11 @@ public class ListGameRepository : GameRepository
         return null;
     }
 
-    public Game? getGameByPlayerId(int id)
+    public Game? GetGameByPlayerId(int id)
     {
         foreach (var game in _games)
         {
-            if (id == game.playerId1 || id == game.playerId2)
+            if (id == game.PlayerId1 || id == game.PlayerId2)
             {
                 return game;
             }

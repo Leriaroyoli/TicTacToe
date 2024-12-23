@@ -6,14 +6,14 @@ public class ListPlayerRepository : PlayerRepository
 {
     private List<Player> _players = new List<Player>();
     
-    public void addPlayer(Player p)
+    public void AddPlayer(Player p)
     {
         int nextId = _players.Count; 
         p.Id = nextId;
         _players.Add(p);
     }
 
-    public Player? getPlayerById(int id)
+    public Player? GetPlayerById(int id)
     {
         foreach (var player in _players)
         {
@@ -27,7 +27,7 @@ public class ListPlayerRepository : PlayerRepository
     }   
     
 
-    public Player? getPlayerByName(string name)
+    public Player? GetPlayerByName(string name)
     {
         foreach (var player in _players)
         {
@@ -40,7 +40,7 @@ public class ListPlayerRepository : PlayerRepository
         return null;
     }
 
-    public List<Player> getAllPlayers()
+    public List<Player> GetAllPlayers()
     {
         return _players;
     }

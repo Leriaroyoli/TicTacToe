@@ -8,8 +8,8 @@ public class PlayerResultInfo
 
     public PlayerResultInfo(PlayerResult r, string playerName)
     {
-        this.playerId = r.playerId;
-        this.status = r.status;
+        this.playerId = r.PlayerId;
+        this.status = r.Status;
         this.playerName = playerName;
     }
     public override string ToString()

@@ -12,7 +12,7 @@ public class ListGameResultRepository: GameResultRepository
     }
     public void CreateGameResult(int gameId, GameResult g)
     {
-        g.gameId = gameId ;
+        g.GameId = gameId ;
         _gameResults.Add(g);
     }
 
@@ -20,7 +20,7 @@ public class ListGameResultRepository: GameResultRepository
     {
         foreach (var game in _gameResults)
         {
-            if (game.gameId != null && game.gameId == id)
+            if (game.GameId != null && game.GameId == id)
             {
                 return game;
             }
@@ -34,8 +34,8 @@ public class ListGameResultRepository: GameResultRepository
         List<GameResult> r = new List<GameResult>();
         foreach (var game in _gameResults)
         {
-            if ( game.playerResult1 != null && playerId == game.playerResult1.playerId ||
-                 game.playerResult2 != null && playerId == game.playerResult2.playerId)
+            if ( game.PlayerResult1 != null && playerId == game.PlayerResult1.PlayerId ||
+                 game.PlayerResult2 != null && playerId == game.PlayerResult2.PlayerId)
             {
                 r.Add(game);
             }

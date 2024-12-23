@@ -17,7 +17,7 @@ while (true)
 {
     try
     {
-        printInstructions();
+        PrintInstructions();
         if (!int.TryParse(Console.ReadLine(), out int r))
         {
             Console.WriteLine("Неправильний ввід. Будь ласка, введіть номер.");
@@ -27,11 +27,11 @@ while (true)
         switch (r)
         {
             case 1:
-                var name = readName();
-                var password = readPassword();
+                var name = ReadName();
+                var password = ReadPassword();
                 try
                 {
-                    playerService.registerPlayer(name, password);
+                    playerService.RegisterPlayer(name, password);
                 }
                 catch (Exception e)
                 {
@@ -39,18 +39,18 @@ while (true)
                 }
                 break;
             case 2:
-                int playerId1 = login();
-                int playerId2 = login();
-                int gameId = gameService.startGame(playerId1, playerId2);
+                int playerId1 = Login();
+                int playerId2 = Login();
+                int gameId = gameService.StartGame(playerId1, playerId2);
                 
                 // Play Tic-Tac-Toe game
-                gameService.playGame(gameId, playerId1, playerId2);
+                gameService.PlayGame(gameId, playerId1, playerId2);
                 break;
             case 3:
-                printHistory();
+                PrintHistory();
                 break;
             case 4:
-                printRatings();
+                PrintRatings();
                 break;
             case 0:
                 Console.WriteLine("Вихід з гри. До побачення!");
@@ -66,21 +66,21 @@ while (true)
     }
 }
 
-string? readPassword()
+string? ReadPassword()
 {
     Console.WriteLine("Введіть пароль:");
     string? password1 = Console.ReadLine();
     return password1;
 }
 
-string? readName()
+string? ReadName()
 {
     Console.WriteLine("Введіть ім'я:");
     string? s = Console.ReadLine();
     return s;
 }
 
-void printInstructions()
+void PrintInstructions()
 {
     Console.WriteLine("щоб зареєструватись введіть 1 \n" +
                       "якщо ви вже зареєстровані, щоб почати введіть 2\n" +
@@ -88,13 +88,13 @@ void printInstructions()
                       "щоб перевірити рейтинг гравців введіть 4");
 }
 
-int login()
+int Login()
 {
-    var name = readName();
-    var password = readPassword();
+    var name = ReadName();
+    var password = ReadPassword();
     try
     {
-        return playerService.loginPlayer(name, password);
+        return playerService.LoginPlayer(name, password);
     }
     catch (Exception e)
     {
@@ -104,7 +104,7 @@ int login()
     
 }
 
-void printRatings()
+void PrintRatings()
 {
     Console.WriteLine("Щоб вивести рейтинг гравця введіть 1\n" +
                       "Щоб вивести рейтинг усіх гравцій введіть 2");
@@ -112,12 +112,12 @@ void printRatings()
     switch (num)
     {
         case 1:
-            Player player = getPlayerFromConsoleByName();
+            Player player = GetPlayerFromConsoleByName();
             Console.WriteLine($"Рейтинг гравця: {player.Rating}");
             break;
         
         case 2:
-            List<Player> players = playerService.getAllPlayers();
+            List<Player> players = playerService.GetAllPlayers();
             foreach (var p in players)
             {
                 Console.WriteLine($"Рейтинг {p.Name}: {p.Rating}");
@@ -131,7 +131,7 @@ void printRatings()
     }
 }
 
-void printHistory()
+void PrintHistory()
 {
     Console.WriteLine("Щоб вивести інформацію про гравця введіть 1\n" +
                       "Щоб вивести інформацію про всіх гравців введіть 2\n" +
@@ -140,15 +140,15 @@ void printHistory()
     switch (num)
     {
         case 1:
-            var player = getPlayerFromConsoleByName();
+            var player = GetPlayerFromConsoleByName();
 
-            List<GameResultInfo> playerGameResults = gameService.getGameResultByPlayerId(player.Id);
-            printGameResults(playerGameResults);
+            List<GameResultInfo> playerGameResults = gameService.GetGameResultByPlayerId(player.Id);
+            PrintGameResults(playerGameResults);
             break;
 
         case 2:
             List<GameResultInfo> allResults = gameService.GetAllResults();
-            printGameResults(allResults);
+            PrintGameResults(allResults);
             break;
 
         default:
@@ -157,10 +157,10 @@ void printHistory()
     }
 }
 
-Player getPlayerFromConsoleByName()
+Player GetPlayerFromConsoleByName()
 {
-    var name = readName();
-    Player? player1 = playerService.getPlayerByName(name);
+    var name = ReadName();
+    Player? player1 = playerService.GetPlayerByName(name);
     if (player1 == null)
     {
         var msg = "Гравця не існує";
@@ -171,7 +171,7 @@ Player getPlayerFromConsoleByName()
     return player1;
 }
 
-void printGameResults(List<GameResultInfo> playerGameResults)
+void PrintGameResults(List<GameResultInfo> playerGameResults)
 {
     foreach (var g in playerGameResults)
     {

@@ -17,34 +17,34 @@ public class DefaultGameService : GameService
         _gameResultRepository = gameResultRepository; 
     }
         
-    public int startGame(int playerId1, int playerId2)
+    public int StartGame(int playerId1, int playerId2)
     {
         GetAndValidatePlayer(playerId1);
         GetAndValidatePlayer(playerId2);
 
         Game g = new Game(playerId1, playerId2);
-        return _gameRepository.createGame(g);
+        return _gameRepository.CreateGame(g);
     }
     
-    public void endGame(int gameId, PlayerResult playerResult1, PlayerResult playerResult2)
+    public void EndGame(int gameId, PlayerResult playerResult1, PlayerResult playerResult2)
     {
-        Game? game =_gameRepository.getGameById(gameId);
+        Game? game =_gameRepository.GetGameById(gameId);
         if (game == null)
         {
             throw new Exception("Гра не знайдена:(");
         }
 
-        toScorePoints(playerResult1);
-        toScorePoints(playerResult2);
+        ToScorePoints(playerResult1);
+        ToScorePoints(playerResult2);
 
         GameResult gr = new GameResult(gameId, playerResult1, playerResult2);
         _gameResultRepository.CreateGameResult(gameId, gr);
     }
 
-    public List<GameResultInfo> getGameResultByPlayerId(int playerId)
+    public List<GameResultInfo> GetGameResultByPlayerId(int playerId)
     {
         List<GameResult> gameResults = _gameResultRepository.GetGameResultByPlayerId(playerId);
-        var gameResultsInfo = getGameResultsInfo(gameResults);
+        var gameResultsInfo = GetGameResultsInfo(gameResults);
 
         return gameResultsInfo;
     }
@@ -52,10 +52,10 @@ public class DefaultGameService : GameService
     public List<GameResultInfo> GetAllResults()
     {
         List<GameResult> allResults = _gameResultRepository.GetAllResults();
-        return getGameResultsInfo(allResults);
+        return GetGameResultsInfo(allResults);
     }
     
-    public void playGame(int gameId, int playerId1, int playerId2)
+    public void PlayGame(int gameId, int playerId1, int playerId2)
     {
         char[,] board = new char[3, 3];
         InitializeBoard(board);
@@ -65,7 +65,7 @@ public class DefaultGameService : GameService
         while (!gameEnded)
         {
             PrintBoard(board);
-            Console.WriteLine($"Player {currentPlayer}, enter your move (row and column): ");
+            Console.WriteLine($"Гравець {currentPlayer}, введіть свій хід (рядок і стовпець): ");
             string[] input = Console.ReadLine().Split(' ');
             int row = int.Parse(input[0]);
             int col = int.Parse(input[1]);
@@ -77,15 +77,15 @@ public class DefaultGameService : GameService
                 if (CheckWinner(board, currentPlayer == playerId1 ? 'X' : 'O'))
                 {
                     Console.WriteLine($"Player {currentPlayer} wins!");
-                    endGame(gameId, 
+                    EndGame(gameId, 
                         new PlayerResult(playerId1, currentPlayer == playerId1 ? PlayerGameStatus.WIN: PlayerGameStatus.LOSE),
                         new PlayerResult(playerId2, currentPlayer == playerId2 ? PlayerGameStatus.WIN: PlayerGameStatus.LOSE));
                     gameEnded = true;
                 }
                 else if (IsBoardFull(board))
                 {
-                    Console.WriteLine("The game is a draw!");
-                    endGame(gameId, 
+                    Console.WriteLine("Нічия!");
+                    EndGame(gameId, 
                         new PlayerResult(playerId1, PlayerGameStatus.DRAW),
                         new PlayerResult(playerId2, PlayerGameStatus.DRAW));
                     gameEnded = true;
@@ -97,7 +97,7 @@ public class DefaultGameService : GameService
             }
             else
             {
-                Console.WriteLine("Invalid move. Try again.");
+                Console.WriteLine("Некоректний хід. Спробуйте ще раз.");
             }
         }
     }
@@ -154,12 +154,12 @@ public class DefaultGameService : GameService
     
     private Player? GetAndValidatePlayer(int playerId1)
     { 
-        Player? player1 = _playerService.getPlayerById(playerId1); 
-        validatePlayer(player1);
+        Player? player1 = _playerService.GetPlayerById(playerId1); 
+        ValidatePlayer(player1);
         return player1;
     }
     
-    private void validatePlayer(Player? player)
+    private void ValidatePlayer(Player? player)
     {
         if (player == null || player.Rating < 100)
         {
@@ -167,39 +167,39 @@ public class DefaultGameService : GameService
         }
     }
     
-    private List<GameResultInfo> getGameResultsInfo(List<GameResult> gameResults)
+    private List<GameResultInfo> GetGameResultsInfo(List<GameResult> gameResults)
     {
         List<GameResultInfo> gameResultsInfo = new List<GameResultInfo>();
         foreach (var g in gameResults)
         {
-            PlayerResultInfo p1 = buildPlayerResultInfo(g.playerResult1);
-            PlayerResultInfo p2 = buildPlayerResultInfo(g.playerResult2);
-            GameResultInfo gri = new GameResultInfo(g.gameId, p1, p2);
+            PlayerResultInfo p1 = BuildPlayerResultInfo(g.PlayerResult1);
+            PlayerResultInfo p2 = BuildPlayerResultInfo(g.PlayerResult2);
+            GameResultInfo gri = new GameResultInfo(g.GameId, p1, p2);
             gameResultsInfo.Add(gri);
         }
 
         return gameResultsInfo;
     }
 
-    private PlayerResultInfo buildPlayerResultInfo(PlayerResult playerResult)
+    private PlayerResultInfo BuildPlayerResultInfo(PlayerResult playerResult)
     {
-        int playerId1 = playerResult.playerId;
-        Player? player1 =_playerService.getPlayerById(playerId1);
+        int playerId1 = playerResult.PlayerId;
+        Player? player1 =_playerService.GetPlayerById(playerId1);
         return new PlayerResultInfo(playerResult, player1.Name);
     }
     
-    private void toScorePoints(PlayerResult playerResult1)
+    private void ToScorePoints(PlayerResult playerResult1)
     {
-        switch (playerResult1.status)
+        switch (playerResult1.Status)
         {
             case PlayerGameStatus.WIN:
-                _playerService.addOrWithdraw(playerResult1.playerId, 100, ManipulationType.ADD);
+                _playerService.AddOrWithdraw(playerResult1.PlayerId, 100, ManipulationType.ADD);
                 break;
             case PlayerGameStatus.LOSE:
-                _playerService.addOrWithdraw(playerResult1.playerId, 100, ManipulationType.WITHDRAW);
+                _playerService.AddOrWithdraw(playerResult1.PlayerId, 100, ManipulationType.WITHDRAW);
                 break;
             case PlayerGameStatus.DRAW:
-                _playerService.addOrWithdraw(playerResult1.playerId, 50, ManipulationType.ADD);
+                _playerService.AddOrWithdraw(playerResult1.PlayerId, 50, ManipulationType.ADD);
                 break;
         }
     }

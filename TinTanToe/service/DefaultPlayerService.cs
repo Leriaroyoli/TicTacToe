@@ -12,26 +12,26 @@ public class DefaultPlayerService : PlayerService
         _playerRepository = playerRepository; 
     }
     
-    public void registerPlayer(string? name, string? password)
+    public void RegisterPlayer(string? name, string? password)
     {//todo 1. перевірити чи не існує гравця з таким ім'ям 
         // 2. якщо існує, помилка. 3.створити об'єкт player 4. зберегти в _playerRepository 
-        validateNameAndPassword(name, password);
-        validatePlayerNotFound(name, "Гравець з таким їм'ям вже існує");
+        ValidateNameAndPassword(name, password);
+        ValidatePlayerNotFound(name, "Гравець з таким їм'ям вже існує");
 
         Player player = new Player(name, password, 1000);
         
-        _playerRepository.addPlayer(player);
+        _playerRepository.AddPlayer(player);
     }
     
-    public void donate500(int id)
+    public void Donate500(int id)
     {
-        var p = getPlayerByIdOrThrowIfNull(id);
-        p.addToRating(500);
+        var p = GetPlayerByIdOrThrowIfNull(id);
+        p.AddToRating(500);
     }
     
-    public int loginPlayer(string? name, string? password)
+    public int LoginPlayer(string? name, string? password)
     {
-        validateNameAndPassword(name, password);
+        ValidateNameAndPassword(name, password);
         Player existingPlayer = GetPlayerByNameAndThrowIfNull(name, "Гравця не існує");
 
         if (existingPlayer.Password == password)
@@ -42,40 +42,40 @@ public class DefaultPlayerService : PlayerService
         throw new Exception("Пароль не вірний");
     }
     
-    public Player? getPlayerById(int id)
+    public Player? GetPlayerById(int id)
     {
-        return _playerRepository.getPlayerById(id);
+        return _playerRepository.GetPlayerById(id);
     }
     
-    public Player? getPlayerByName(string name)
+    public Player? GetPlayerByName(string name)
     {
-        return _playerRepository.getPlayerByName(name);
+        return _playerRepository.GetPlayerByName(name);
     }
 
-    public List<Player> getAllPlayers()
+    public List<Player> GetAllPlayers()
     {
-        return _playerRepository.getAllPlayers()
+        return _playerRepository.GetAllPlayers()
             .OrderByDescending(item => item.Rating)
             .ToList();
     }
 
-    public void addOrWithdraw(int playerId, double sum, ManipulationType type)
+    public void AddOrWithdraw(int playerId, double sum, ManipulationType type)
     {
-        Player player = getPlayerByIdOrThrowIfNull(playerId);
+        Player player = GetPlayerByIdOrThrowIfNull(playerId);
         switch (type)
         {
             case ManipulationType.ADD:
-                player.addToRating(sum);
+                player.AddToRating(sum);
                 break;
             case ManipulationType.WITHDRAW:
-                player.withdrawFromRating(sum);
+                player.WithdrawFromRating(sum);
                 break;
         }
     }
     
-    private void validatePlayerNotFound(string name, string exceptionMessage)
+    private void ValidatePlayerNotFound(string name, string exceptionMessage)
     {
-        Player? existingPlayer = getPlayerByName(name);
+        Player? existingPlayer = GetPlayerByName(name);
         if (existingPlayer != null)
         {
             throw new Exception(exceptionMessage);
@@ -83,7 +83,7 @@ public class DefaultPlayerService : PlayerService
     } 
     private Player GetPlayerByNameAndThrowIfNull(string name, string exceptionMessage)
     {
-        Player? existingPlayer = getPlayerByName(name);
+        Player? existingPlayer = GetPlayerByName(name);
         if (existingPlayer == null)
         {
             throw new Exception(exceptionMessage);
@@ -92,7 +92,7 @@ public class DefaultPlayerService : PlayerService
         return existingPlayer;
         
     } 
-    private void validateNameAndPassword(string? name, string? password)
+    private void ValidateNameAndPassword(string? name, string? password)
     {
         if (name== null || password== null)
         {
@@ -100,9 +100,9 @@ public class DefaultPlayerService : PlayerService
         }
     }
     
-    private Player getPlayerByIdOrThrowIfNull(int id)
+    private Player GetPlayerByIdOrThrowIfNull(int id)
     {
-        Player? p = getPlayerById(id);
+        Player? p = GetPlayerById(id);
         if (p == null)
         {
             throw new Exception("Гравця з таким id не існує");
