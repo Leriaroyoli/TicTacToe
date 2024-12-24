@@ -2,18 +2,18 @@
 
 public class PlayerResultInfo
 {
-    public int playerId { get; set; } 
-    public string playerName { get; set; } 
-    public PlayerGameStatus status { get; set; }
+    public int PlayerId { get; set; } 
+    public string PlayerName { get; set; } 
+    public PlayerGameStatus Status { get; set; }
 
     public PlayerResultInfo(PlayerResult r, string playerName)
     {
-        this.playerId = r.PlayerId;
-        this.status = r.Status;
-        this.playerName = playerName;
+        this.PlayerId = r.PlayerId;
+        this.Status = r.Status;
+        this.PlayerName = playerName;
     }
     public override string ToString()
     {
-        return $"{nameof(playerName)}:{playerName}, {nameof(playerId)}: {playerId}, {nameof(status)}: {status}";
+        return $"{nameof(PlayerName)}:{PlayerName}, {nameof(PlayerId)}: {PlayerId}, {nameof(Status)}: {Status}";
     }
 }
